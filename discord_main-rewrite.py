@@ -22,3 +22,14 @@ class DiscordBot:
         config = Cfgparser()
         self.command_prefix = config.getDefaultPrefix()
         self.dToken = config.getDiscordToken()
+        self.bot = commands.Bot(self.command_prefix)
+        self.timenow = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
+if __name__ == "__main__":
+    try:
+        discBot = DiscordBot()
+        discBot.bot.run()
+    except KeyboardInterrupt:
+        print("[{}][{}]{}")
+
+    pass

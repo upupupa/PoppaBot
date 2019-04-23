@@ -19,7 +19,8 @@ class Cfgparser:
             self.config['DEFAULT'] = {'discord_token': 'insert your discord token',
                                     'osu_token': 'insert your osu token',
                                     'mongoDB': ["localhost", 27017],
-                                    'default_command_prefix': '?'}
+                                    'default_command_prefix': '?',
+                                    'default_locale': 'en'}
             with open(self.path + self.slash + 'config.ini', 'w') as configfile:
                 self.config.write(configfile)
                 configfile.close()
