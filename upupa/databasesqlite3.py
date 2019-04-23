@@ -28,7 +28,7 @@ class Database:
         This function creates needed tables to get up with.
         """
         try:
-            self.cursor.execute("CREATE TABLE Discord(id INTEGER PRIMARY KEY, server_id INT UNIQUE)")
+            self.cursor.execute("CREATE TABLE Discord(id INTEGER PRIMARY KEY, server_id INT UNIQUE, admin_role STRING, locale STRING)")
             print("Table Discord created!")
         except Error as e:
             print(e)
