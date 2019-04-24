@@ -20,6 +20,12 @@ command_prefix = "?"
 timenow = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 bot = commands.Bot(command_prefix=command_prefix)
 
+class DiscordBot:
+    def __init__(self, command_prefix):
+        self.command_prefix = command_prefix
+        self.bot = commands.Bot(command_prefix=self.command_prefix)
+    
+
 def set_def_params(*args):
     global command_prefix
     command_prefix = args[0]
