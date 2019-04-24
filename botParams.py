@@ -47,6 +47,7 @@ class DiscordBot:
                 config.readConfigFile()
                 config.writeConfigFile("osu_token", self.osuToken)
                 
+    def 
 
 if __name__ == "__main__":
     try:
