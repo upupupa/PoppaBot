@@ -12,22 +12,17 @@ class Cfgparser:
         else:
             self.slash = "/" 
         self.config = configparser.ConfigParser()
-        try:
-            self.config.read(self.path + self.slash + "config.ini")
-        except Exception as e:
-            print(e)
-            self.config['DEFAULT'] = {'discord_token': 'insert your discord token',
-                                    'osu_token': 'insert your osu token',
-                                    'mongoDB': ["localhost", 27017],
-                                    'default_command_prefix': '?',
-                                    'default_locale': 'en'}
-            with open(self.path + self.slash + 'config.ini', 'w') as configfile:
-                self.config.write(configfile)
-                configfile.close()
-        finally:
-            with open(self.path + self.slash + "config.ini", "r") as configfile:
-                self.config.read(configfile)
-                configfile.close()
+
+    def writeConfigFile(self, key, data):
+        self.config['DEFAULT'][key] = data
+        with open(self.path + self.slash + 'config.ini', 'w') as configfile:
+            self.config.write(configfile)
+            configfile.close()
+
+    def readConfigFile(self):
+        with open(self.path + self.slash + "config.ini", "r") as configfile:
+            self.config.read(configfile)
+            configfile.close()
 
     def getDefaultPrefix(self):
         return self.config['DEFAULT']['default_command_prefix']
@@ -40,3 +35,16 @@ class Cfgparser:
     
     def getMongoDBadr(self):
         return self.config['DEFAULT']['mongoDB']
+
+    def getLocale(self):
+        return self.config['DEFAULT']['default_locale']
+
+    def setDefaults(self):
+        self.config['DEFAULT'] = {'discord_token': 'insert your discord token',
+                                    'osu_token': 'insert your osu token',
+                                    'mongoDB': ["localhost", 27017],
+                                    'default_command_prefix': '?',
+                                    'default_locale': 'en'}
+        with open(self.path + self.slash + 'config.ini', 'w') as configfile:
+                self.config.write(configfile)
+                configfile.close()
