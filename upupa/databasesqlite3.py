@@ -70,14 +70,13 @@ class Database:
         return entry
 
     def get_locale(self, server_id:int):
-        self.cursor.execute("SELECT locale FROM Discord WHERE (server_id=?)", server_id)
+        self.cursor.execute("SELECT locale FROM Discord WHERE (server_id=?)", (server_id,))
         entry = self.cursor.fetchone()
         if entry is None:
             print("No locale set. Setting locale.")
             self.cursor.execute("INSERT INTO Discord(locale) WHERE (server_id = ?) VALUES (?)", server_id, "en")
             return "en"
-        print(entry)
-        return entry
+        return entry[0]
 
     def insert_command_prefix(self, server_id:int, prefix):
         """
@@ -117,7 +116,7 @@ class Database:
         return
 
     def insert_locale(self, server_id:int, locale):
-        self.cursor.execute("INSERT INTO Discord (locale) VALUES (?) WHERE (server_id=?)", (locale, server_id))
+        self.cursor.execute("UPDATE Discord SET locale=? WHERE server_id=?", (locale, server_id))
         self.conn.commit()
 
     def remove_entry(self, idPrimKey:int):

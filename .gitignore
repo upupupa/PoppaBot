@@ -108,3 +108,4 @@ venv.bak/
 .vscode/settings.json
 database/responses.db
 config.ini
+config.json

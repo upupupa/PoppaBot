@@ -1,4 +1,4 @@
-import configparser
+import json
 import os
 import sys
 sys.path.append(os.path)
@@ -7,21 +7,20 @@ class Cfgparser:
 
     def __init__(self):  
         if os.name == "nt":
-            self.path = os.path.normpath(os.getcwd() + "\\config\\") + "\\"
+            self.path = os.path.normpath(os.getcwd()) + "\\"
         else:
-            self.path = os.path.normpath(os.getcwd() + "/config/") + "/"
-        self.config = configparser.ConfigParser()
-        self.readConfigFile()
+            self.path = os.path.normpath(os.getcwd()) + "/"
+        self.config = {'DEFAULT': {}}
 
     def writeConfigFile(self, key, data):
         self.config['DEFAULT'][key] = data
-        with open(self.path + 'config.ini', 'w') as configfile:
-            self.config.write(configfile)
+        with open(self.path + 'config.json', 'w') as configfile:
+            configfile.write(self.config)
             configfile.close()
 
     def readConfigFile(self):
-        with open(self.path + "config.ini", "r") as configfile:
-            self.config.read(configfile)
+        with open(self.path + "config.json", "r") as configfile:
+            self.config = json.load(configfile)
             configfile.close()
 
     def getDefaultPrefix(self):
@@ -40,11 +39,11 @@ class Cfgparser:
         return self.config['DEFAULT']['default_locale']
 
     def setDefaults(self):
-        self.config['DEFAULT'] = {'discord_token': 'insert your discord token',
+        self.config = json.dumps({'DEFAULT': {'discord_token': 'insert your discord token',
                                     'osu_token': 'insert your osu token',
                                     'mongoDB': ["localhost", 27017],
                                     'default_command_prefix': '?',
-                                    'default_locale': 'en'}
-        with open(self.path + 'config.ini', 'w') as configfile:
-                self.config.write(configfile)
-                configfile.close()
+                                    'default_locale': 'en'}}, indent=2)
+        with open(self.path + 'config.json', 'w') as configfile:
+            configfile.write(self.config)
+            configfile.close()

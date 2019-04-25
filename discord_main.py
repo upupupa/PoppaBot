@@ -18,8 +18,8 @@ import discord
 from discord.ext import commands
 
 def get_init_locale():
-    locale = Locales().getLocale()
-    return locale
+    loc = Locales().getLocale()
+    return loc
 
 timenow = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 locale = get_init_locale()
@@ -80,10 +80,13 @@ async def list_phrases(ctx):
 @bot.command()
 async def setlocale(ctx, lang):
     localesList = Locales().getlocalesList()
+    print(localesList)
     if lang in localesList:
         server_id = ctx.guild.id
         chat = Chatting("setlocale", server_id)
         chat.setLang(lang)
+        print(lang)
+        global locale
         answer = locale[lang]['setlocale']['success']
     else:
         answer = locale[lang]['setlocale']['failure']
@@ -186,7 +189,18 @@ async def remove_phrase(ctx, *request):
 
 if __name__ == "__main__":
     config = Cfgparser()
+    try:
+        config.readConfigFile()
+    except Exception as e:
+        print(e)
+        config.setDefaults()
+        config.readConfigFile()
     dtoken = config.getDiscordToken()
+    if dtoken.startswith("insert "):
+        dtoken = input("Input your Discord TOKEN:\n")
+        config.writeConfigFile("discord_token", dtoken)
+        osutoken = input("Input your Osu API TOKEN:\n")
+        config.writeConfigFile("osu_token", osutoken)
     command_prefix = config.getDefaultPrefix()
     locale = config.getLocale()
     try:
