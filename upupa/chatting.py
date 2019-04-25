@@ -40,6 +40,12 @@ class Chatting:
     def removeResponseEntry(self, idPrimKey):
         self.db.remove_entry(idPrimKey=idPrimKey)
 
+    def setLang(self, lang):
+        self.db.insert_locale(self.server_id, lang)
+    
+    def getLang(self):
+        return self.db.get_locale(self.server_id)
+
 if __name__ == "__main__":    
     test = Chatting("add", "test")
     test.addResponse_str("string1", "string2")
