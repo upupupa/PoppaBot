@@ -162,7 +162,7 @@ class DiscordBot:
         pass
 
     self.bot.add_command(add_phrase)
-    self.bot.add_command
+    self.bot.add_command()
 
 
 # @bot.command()
