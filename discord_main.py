@@ -17,18 +17,17 @@ import upupa.osu as osu
 import discord
 from discord.ext import commands
 
-def get_init_locale():
-    loc = Locales().getLocale()
-    return loc
-
 timenow = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-locale = get_init_locale()
 command_prefix = "?"
 bot = commands.Bot(command_prefix=command_prefix)
 
 def get_lang(server_id):
     chat = Chatting("get_locale", server_id)
     return chat.getLang()
+
+def get_locale():
+    loc = Locales().getLocale()
+    return loc
 
 @bot.event
 async def on_ready():
@@ -37,6 +36,7 @@ async def on_ready():
 @bot.command()
 async def add_phrase(ctx, *args):
     if ctx.message.author.guild_permissions.administrator:
+        locale = get_locale()
         lang = get_lang(ctx.guild.id)
         async with ctx.typing():
             if len(args) != 2:
@@ -59,6 +59,7 @@ async def add_phrase(ctx, *args):
 async def list_phrases(ctx):
     server_id = ctx.guild.id
     lang = get_lang(server_id)
+    locale = get_locale()
     chat = Chatting("list", server_id)
     entry = chat.getResponseEntry()
     if entry is None:
@@ -80,13 +81,11 @@ async def list_phrases(ctx):
 @bot.command()
 async def setlocale(ctx, lang):
     localesList = Locales().getlocalesList()
-    print(localesList)
     if lang in localesList:
         server_id = ctx.guild.id
         chat = Chatting("setlocale", server_id)
         chat.setLang(lang)
-        print(lang)
-        global locale
+        locale = get_locale()
         answer = locale[lang]['setlocale']['success']
     else:
         answer = locale[lang]['setlocale']['failure']
@@ -125,9 +124,10 @@ async def on_message(message):
 
 @bot.command()
 async def remove_phrase(ctx, *request):
-    if ctx.message.author.server_permissions.administrator:
+    if ctx.message.author.guild_permissions.administrator:
         server_id = ctx.guild.id
         lang = get_lang(server_id)
+        locale = get_locale()
         chat = Chatting("remove", server_id)
         entry = chat.getResponseEntry()
         request_entry = []
@@ -162,7 +162,7 @@ async def remove_phrase(ctx, *request):
                             await ctx.send(answer)
                         else:
                             answer = locale[lang]['remove_phrase']['failure'].format(command_prefix)
-                            await ctx.send("Incorrect input!")
+                            await ctx.send(answer)
                 except IndexError:
                     if len(response) > 1:
                         text = ""
