@@ -83,7 +83,7 @@ async def add_role(ctx, *role):
         for i in ctx.guild.roles:
             if role == i.name:
                 chat = Chatting("add_role", server_id)
-                chat.insertRole(role)
+                chat.insertRole(role[0])
                 answer = locale[lang]["add_role"]["success"].format(role)
                 flag = False
                 break
