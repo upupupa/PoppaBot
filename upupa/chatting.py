@@ -46,6 +46,15 @@ class Chatting:
     def getLang(self):
         return self.db.get_locale(self.server_id)
 
+    def insertRole(self, role):
+        self.db.insert_role(self.server_id, role)
+
+    def getRoles(self):
+        roles = self.db.get_roles(self.server_id)
+        if roles is None:
+            return None
+        return roles.split(";")
+
 if __name__ == "__main__":    
     test = Chatting("add", "test")
     test.addResponse_str("string1", "string2")

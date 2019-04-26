@@ -29,13 +29,27 @@ def get_locale():
     loc = Locales().getLocale()
     return loc
 
+def check_permissions(ctx):
+    chat = Chatting("get_roles", ctx.guild.id)
+    roles = chat.getRoles()
+    if ctx.message.author.guild_permissions.administrator:
+        return True
+    elif roles is None:
+        return False
+    for i in roles:
+        for j in ctx.message.author.roles:
+            if i == j.name:
+                return True
+    else:
+        return False
+
 @bot.event
 async def on_ready():
     print("[{}][{}]PoppaBot ready!".format(timenow, "LAUNCH"))
 
 @bot.command()
 async def add_phrase(ctx, *args):
-    if ctx.message.author.guild_permissions.administrator:
+    if check_permissions(ctx):
         locale = get_locale()
         lang = get_lang(ctx.guild.id)
         async with ctx.typing():
@@ -54,6 +68,50 @@ async def add_phrase(ctx, *args):
                 answer = locale[lang]['add_phrase']['success'].format(args[0])
                 await ctx.send(answer)
                 return
+
+@bot.command()
+async def add_role(ctx, *role):
+    if check_permissions(ctx):
+        locale = get_locale()
+        lang = get_lang(ctx.guild.id)
+        server_id = ctx.guild.id
+        flag = True
+        if len(role) != 1:
+            answer = locale[lang]["add_role"]["failure"].format(command_prefix)
+            await ctx.send(answer)
+            return
+        for i in ctx.guild.roles:
+            if role == i.name:
+                chat = Chatting("add_role", server_id)
+                chat.insertRole(role)
+                answer = locale[lang]["add_role"]["success"].format(role)
+                flag = False
+                break
+        if flag:
+            answer = locale[lang]["add_role"]["roledoesntexist"].format(role)
+        await ctx.send(answer)    
+
+@bot.command()
+async def remove_role(ctx, *role):
+    # TODO
+    pass
+
+@bot.command()
+async def list_roles(ctx):
+    if check_permissions:
+        server_id = ctx.guild.id
+        lang = get_lang(server_id)
+        locale = get_locale()
+        chat = Chatting("list_roles", server_id)
+        roles = chat.getRoles()
+        if roles is None:
+            answer = locale[lang]['list_roles']['entryIsEmpty']
+            await ctx.send(answer)
+        else:
+            answer = locale[lang]['list_roles']['entryisntempty']
+            for i in range(0, len(roles)-1):
+                answer += "```{}.{}\n```".format(i+1, roles[i])
+            await ctx.send(answer)
 
 @bot.command()
 async def list_phrases(ctx):
@@ -80,16 +138,17 @@ async def list_phrases(ctx):
 
 @bot.command()
 async def setlocale(ctx, lang):
-    localesList = Locales().getlocalesList()
-    if lang in localesList:
-        server_id = ctx.guild.id
-        chat = Chatting("setlocale", server_id)
-        chat.setLang(lang)
-        locale = get_locale()
-        answer = locale[lang]['setlocale']['success']
-    else:
-        answer = locale[lang]['setlocale']['failure']
-    await ctx.send(answer)
+    if check_permissions(ctx):
+        localesList = Locales().getlocalesList()
+        if lang in localesList:
+            server_id = ctx.guild.id
+            chat = Chatting("setlocale", server_id)
+            chat.setLang(lang)
+            locale = get_locale()
+            answer = locale[lang]['setlocale']['success']
+        else:
+            answer = locale[lang]['setlocale']['failure']
+        await ctx.send(answer)
 
 @bot.event
 async def on_message(message):
@@ -124,7 +183,7 @@ async def on_message(message):
 
 @bot.command()
 async def remove_phrase(ctx, *request):
-    if ctx.message.author.guild_permissions.administrator:
+    if check_permissions(ctx):
         server_id = ctx.guild.id
         lang = get_lang(server_id)
         locale = get_locale()

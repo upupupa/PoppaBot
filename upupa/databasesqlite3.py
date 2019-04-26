@@ -72,21 +72,20 @@ class Database:
     def get_locale(self, server_id:int):
         self.cursor.execute("SELECT locale FROM Discord WHERE (server_id=?)", (server_id,))
         entry = self.cursor.fetchone()
-        if entry is None:
+        if entry[0] is None:
             print("No locale set. Setting locale.")
-            self.cursor.execute("INSERT INTO Discord(locale) WHERE (server_id = ?) VALUES (?)", server_id, "en")
+            self.cursor.execute("UPDATE Discord SET locale=? WHERE server_id=?", ("en", server_id))
+            self.conn.commit()
             return "en"
         return entry[0]
 
-    def insert_command_prefix(self, server_id:int, prefix):
-        """
-        Params:\n
-        server_id - Discord server id
-        prefix - Command prefix
-        """
-        self.insert_server(server_id=server_id)
-        self.cursor.execute("INSERT INTO Discord(")
-        
+    def get_roles(self, server_id:int):
+        self.cursor.execute("SELECT role FROM Discord WHERE (server_id=?)", (server_id,))
+        entry = self.cursor.fetchone()
+        if entry[0] is None:
+            return None
+        return entry[0]
+
     def insert_response(self, server_id:int, request_str, response_str):
         """
         Params:\n
@@ -98,7 +97,14 @@ class Database:
         self.cursor.execute("INSERT INTO Responses(server_id, request_str, response_str) VALUES ((SELECT id FROM Discord WHERE server_id=?), ? ,?)", (server_id, request_str, response_str))
         self.conn.commit()
 
-    # def insert_role(self, server_id:int, role):
+    def insert_role(self, server_id:int, role):
+        self.roles = self.get_roles(server_id)
+        if self.roles is None:
+            role += ";"
+        else:
+            role += self.roles + ";"
+        self.cursor.execute("UPDATE Discord SET role=? WHERE server_id=?", (role, server_id))
+        self.conn.commit()
     
     def insert_server(self, server_id:int):
         """
