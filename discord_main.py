@@ -81,14 +81,14 @@ async def add_role(ctx, *role):
             await ctx.send(answer)
             return
         for i in ctx.guild.roles:
-            if role == i.name:
+            if role[0] == i.name:
                 chat = Chatting("add_role", server_id)
                 chat.insertRole(role[0])
-                answer = locale[lang]["add_role"]["success"].format(role)
+                answer = locale[lang]["add_role"]["success"].format(role[0])
                 flag = False
                 break
         if flag:
-            answer = locale[lang]["add_role"]["roledoesntexist"].format(role)
+            answer = locale[lang]["add_role"]["roledoesntexist"].format(role[0])
         await ctx.send(answer)    
 
 @bot.command()
