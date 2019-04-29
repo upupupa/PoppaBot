@@ -50,8 +50,9 @@ class Chatting:
         self.db.insert_role(self.server_id, role)
 
     def updateRoles(self, *roles):
-        markedRoles = roles[0]
-        markedRoles += ";"
+        markedRoles = None
+        if roles[0] is None:
+            self.db.update_roles(self.server_id, markedRoles)
         if len(roles) > 1:
             for i in range(1, len(roles)):
                 markedRoles = markedRoles + roles[i] + ";"

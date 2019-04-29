@@ -75,6 +75,12 @@ async def add_role(ctx, *role):
         locale = get_locale()
         lang = get_lang(ctx.guild.id)
         server_id = ctx.guild.id
+        chat = Chatting("add_role", server_id)
+        if chat.getRoles():
+            if role[0] in chat.getRoles():
+                answer = locale[lang]["add_role"]["roleisalready"].format(role[0])
+                await ctx.send(answer)
+                return
         flag = True
         if len(role) != 1:
             answer = locale[lang]["add_role"]["failure"].format(command_prefix)
@@ -82,7 +88,6 @@ async def add_role(ctx, *role):
             return
         for i in ctx.guild.roles:
             if role[0] == i.name:
-                chat = Chatting("add_role", server_id)
                 chat.insertRole(role[0])
                 answer = locale[lang]["add_role"]["success"].format(role[0])
                 flag = False
@@ -100,7 +105,6 @@ async def remove_role(ctx, *role):
         server_id = ctx.guild.id
         chat = Chatting("remove_role", server_id)
         permRoles = chat.getRoles()
-        print(permRoles)
         if len(role) == 0 or len(role) > 1:
             answer = locale[lang]['remove_role']['failure'].format(command_prefix)
             await ctx.send(answer)
@@ -110,6 +114,7 @@ async def remove_role(ctx, *role):
             for i in range(0, len(permRoles)-1):
                 if role[0] == permRoles[i]:
                     permRoles.pop(i)
+                    chat.updateRoles(permRoles)
                     answer = locale[lang]['remove_role']['success'].format(role[0])
             await ctx.send(answer)
     pass
@@ -122,7 +127,6 @@ async def list_roles(ctx):
         locale = get_locale()
         chat = Chatting("list_roles", server_id)
         roles = chat.getRoles()
-        print(roles)
         if roles is None:
             answer = locale[lang]['list_roles']['entryIsEmpty']
             await ctx.send(answer)

@@ -7,7 +7,8 @@
         "add_role":{
             "success": "Added new access role {}",
             "failure": "Incorrect input.\nUse ```{}add_role 'role'```",
-            "roledoesntexist": "Role {} doesn't exist"
+            "roledoesntexist": "Role {} doesn't exist",
+            "roleisalready": "Role {} already has permission to admin commands"
         },
         "list_roles": {
             "entryIsEmpty": "No roles with permission for admin commands",
@@ -44,7 +45,8 @@
         "add_role":{
             "success": "Доступ к админ. командам для роли {} предоставлен",
             "failure": "Ошибка ввода.\nИспользуй ```{}add_role 'роль'```",
-            "roledoesntexist": "Роль {} не существует"
+            "roledoesntexist": "Роль {} не существует",
+            "roleisalready": "Роль {} уже имеет доступ к админ командам"
         },
         "list_roles":{
             "entryIsEmpty": "Нет ролей, у которых есть доступ к админ. командам",
@@ -81,7 +83,8 @@
         "add_role":{
             "success": "Доступ до адмін. команд для ролі {} надано",
             "failure": "Помилка вводу.\nВикористовуй ```{}add_role 'роль'```",
-            "roledoesntexist": "Роль {} не існує"
+            "roledoesntexist": "Роль {} не існує",
+            "roleisalready": "Роль {} вже має доступ до адмін команд"
         },
         "list_roles": {
             "entryIsEmpty": "Немає ролей, які мают доступ до адмін команд",
