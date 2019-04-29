@@ -94,6 +94,24 @@ async def add_role(ctx, *role):
 @bot.command()
 async def remove_role(ctx, *role):
     # TODO
+    if check_permissions(ctx):
+        locale = get_locale()
+        lang = get_lang(ctx.guild.id)
+        server_id = ctx.guild.id
+        chat = Chatting("remove_role", server_id)
+        permRoles = chat.getRoles()
+        print(permRoles)
+        if len(role) == 0 or len(role) > 1:
+            answer = locale[lang]['remove_role']['failure'].format(command_prefix)
+            await ctx.send(answer)
+            return
+        else:
+            answer = locale[lang]['remove_role']['nosuchroles'].format(command_prefix)
+            for i in range(0, len(permRoles)-1):
+                if role[0] == permRoles[i]:
+                    permRoles.pop(i)
+                    answer = locale[lang]['remove_role']['success'].format(role[0])
+            await ctx.send(answer)
     pass
 
 @bot.command()
@@ -104,6 +122,7 @@ async def list_roles(ctx):
         locale = get_locale()
         chat = Chatting("list_roles", server_id)
         roles = chat.getRoles()
+        print(roles)
         if roles is None:
             answer = locale[lang]['list_roles']['entryIsEmpty']
             await ctx.send(answer)

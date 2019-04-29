@@ -102,10 +102,14 @@ class Database:
         if self.roles is None:
             role += ";"
         else:
-            role += self.roles + ";"
+            role = self.roles + role + ";"
         self.cursor.execute("UPDATE Discord SET role=? WHERE server_id=?", (role, server_id))
         self.conn.commit()
     
+    def update_roles(self, server_id:int, roles):
+        self.cursor.execute("UPDATE Discord SET role=? WHERE server_id=?", (roles, server_id))
+        self.conn.commit()
+
     def insert_server(self, server_id:int):
         """
         Params:\n

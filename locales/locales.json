@@ -17,6 +17,11 @@
             "entryIsEmpty": "First add something with ```{}add_phrase``` command!!",
             "pair" : "```{}. Pair {} - {}\n```"
         },
+        "remove_role":{
+            "success": "Role {} now not allowed to use admin commands",
+            "failure": "Incorrect input!\nUse ```{}remove_role 'role-name'```",
+            "nosuchroles": "No such role! Check ```{}list_roles```"
+        },
         "remove_phrase":{
             "entryIsEmpty": "You still dont have anything to remove!?\nFirst add something with ```{}add_phrase``` command!",
             "noSuchPhrase": "No such phrase.",
@@ -49,6 +54,11 @@
             "entryIsEmpty": "Для начала добавь фразу командой ```{}add_phrase```!",
             "pair" : "```{}. Пара {} - {}\n```"
         },
+        "remove_role":{
+            "success": "Роль {} теперь не имеет доступ к админ. коммандам",
+            "failure": "Ошибка ввода.\nИспользуй ```{}remove_role 'роль-для-удаления'```",
+            "nosuchroles": "Такой роли нет. Проверь список ролей ```{}list_roles```"
+        },
         "remove_phrase":{
             "entryIsEmpty": "У тебя даже удалить нечего!\nДобавь новую фразу для начала.\n```{}add_phrase 'фраза' 'ответ'```",
             "noSuchPhrase": "Нет такой фразы.",
@@ -80,6 +90,11 @@
         "list_phrases":{
             "entryIsEmpty": "Спочатку додай фразу застосовуючи команду ```{}add_phrase```!",
             "pair" : "```{}. Пара {} - {}\n```"
+        },
+        "remove_role":{
+            "success": "Роль {} тепер не має доступ до адмін команд",
+            "failure": "Помилка вводу.\nВикористовуй ```{}remove_role 'роль-для-видалення'```",
+            "nosuchroles": "Такої ролі немає. Перевір список ролей ```{}list_roles```"
         },
         "remove_phrase":{
             "entryIsEmpty": "В тебе навіть видалити нічого!\nСпочатку додай нову фразу\n```{}add_phrase 'фраза' 'ответ'```",
