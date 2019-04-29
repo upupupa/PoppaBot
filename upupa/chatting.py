@@ -53,9 +53,11 @@ class Chatting:
         markedRoles = None
         if roles[0] is None:
             self.db.update_roles(self.server_id, markedRoles)
-        if len(roles) > 1:
-            for i in range(1, len(roles)):
-                markedRoles = markedRoles + roles[i] + ";"
+        if len(roles[0]) >= 1:
+            markedRoles = roles[0][0] + ";"
+            if len(roles[0][0]) > 1:
+                for i in range(1, len(roles)):
+                    markedRoles = markedRoles + roles[i] + ";"
         self.db.update_roles(self.server_id, markedRoles)
 
     def getRoles(self):
