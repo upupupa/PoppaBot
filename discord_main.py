@@ -13,13 +13,16 @@ from upupa.chatting import Chatting
 from upupa.config import Cfgparser
 from upupa.databasesqlite3 import Database
 from upupa.locales import Locales
-import upupa.osu as osu
+import upupa.osu as Osu
 import discord
 from discord.ext import commands
 
-timenow = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+# timenow = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 command_prefix = "?"
 bot = commands.Bot(command_prefix=command_prefix)
+
+def timenow():
+    return datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
 def get_lang(server_id):
     chat = Chatting("get_locale", server_id)
@@ -45,7 +48,7 @@ def check_permissions(ctx):
 
 @bot.event
 async def on_ready():
-    print("[{}][{}]PoppaBot ready!".format(timenow, "LAUNCH"))
+    print("[{}][{}]PoppaBot ready!".format(timenow(), "LAUNCH"))
 
 @bot.command()
 async def add_phrase(ctx, *args):
@@ -180,7 +183,7 @@ async def on_message(message):
         pass
     #Process commands
     elif message.content[:1] == command_prefix:
-        print("[{}][{}:{}]This is command".format(timenow, message.channel, message.author))
+        print("[{}][{}:{}]This is command".format(timenow(), message.channel, message.author))
         await bot.process_commands(message)
     #Processing every message from users on server to find match with DB
     #and send output-phrase
@@ -257,18 +260,18 @@ async def remove_phrase(ctx, *request):
                 await ctx.send(answer)            
     pass
 
-# @bot.command()
-# async def osu_add(ctx, *args):
-#     if len(args) != 2:
-#         answer = "incorrect input, use {}osu_add 'gamemode' 'osu nickname or osu id'".format(command_prefix)
-#         await ctx.send(answer)
-#         pass
-#     gamemode:str = args[0]
-#     user = args[1]
-#     if gamemode != "0" or gamemode != "1" or gamemode != "2" or gamemode != "3":
-#         answer = "incorrect gamemode input, possible params: STD = 0, taiko = 1, mania = 2, catch the beat = 3"
-#         await ctx.send(answer)
 
+@bot.command()
+async def osu(ctx, *args):
+    if args[0] == "-p":
+        message = "-p"
+    elif args[0] == "-add":
+        message = "-add"
+    else:
+        message = "no keywords"
+    await ctx.send(message)
+    
+    
 if __name__ == "__main__":
     config = Cfgparser()
     try:
@@ -288,7 +291,7 @@ if __name__ == "__main__":
     try:
         bot.run(dtoken)
     except KeyboardInterrupt:
-        print("[{}][{}]Shutting down...".format(timenow, "via console"))
+        print("[{}][{}]Shutting down...".format(timenow(), "via console"))
         time.sleep(1)
         quit()
     pass
